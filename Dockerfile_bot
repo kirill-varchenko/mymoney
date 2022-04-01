@@ -1,0 +1,9 @@
+FROM python:3.9-slim-buster
+ENV PYTHONUNBUFFERED=1
+WORKDIR /code
+RUN apt-get -y update
+RUN apt-get -y install build-essential
+COPY requirements_bot.txt /code/
+RUN pip install -r requirements_bot.txt
+COPY bot/ /code/
+CMD ["python", "bot.py"]

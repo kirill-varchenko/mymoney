@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container py-3">
+        {% load custom_tags %}
+        <a href="{% url 'admin:index' %}" class="btn btn-primary">В админку</a>
+
+        <div class="row">
+            <div class="col-6">
+                <h2 class="text-center">Счета</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-end">ID</th>
+                            <th>Счёт</th>
+                            <th class="text-end">Остаток</th>
+                            <th>Валюта</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ass in assets %}
+                        <tr>
+                            <td class="text-end">{{ ass.id }}</td>
+                            <td>{{ ass.name }}</td>
+                            <td class="text-end">{{ ass.amount|amount }}</td>
+                            <td>{{ ass.currency.symbol }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <h2 class="text-center">Всего денег</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-end">Остаток</th>
+                            <th>Валюта</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for total in totals %}
+                        <tr>
+                            <td class="text-end">{{ total.amount|amount }}</td>
+                            <td>{{ total.currency.symbol }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h2 class="text-center">Обмены</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-end">ID</th>
+                    <th>Дата</th>
+                    <th class="text-end" colspan="2">Сумма списания</th>
+                    <th class="text-end" colspan="2">Сумма начисления</th>
+                    <th class="text-center" colspan="3">Комиссия</th>
+                    <th class="text-end">Прямой курс</th>
+                    <th class="text-end">Прямой курс с комиссией</th>
+                    <th>Направление</th>
+                    <th class="text-end">Обратный курс</th>
+                    <th class="text-end">Обратный курс с комиссией</th>
+                    <th>Направление</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exchange in exchanges %}
+                <tr>
+                    <td class="text-end">{{ exchange.id }}</td>
+                    <td>{{ exchange.date|date:"Y-m-d" }}</td>
+                    <td class="text-end">{{ exchange.from_amount|amount }}</td>
+                    <td>{{ exchange.from_currency.symbol }}</td>
+                    <td class="text-end">{{ exchange.to_amount|amount }}</td>
+                    <td>{{ exchange.to_currency.symbol }}</td>
+                    <td class="text-end">{{ exchange.fee_amount|amount }}</td>
+                    <td>{{ exchange.fee_currency.symbol }}</td>
+                    <td class="text-end">{% if exchange.fee_percent %} {{ exchange.fee_percent|floatformat:2 }}% {% endif %}</td>
+                    <td class="text-end">{{ exchange.rate_dir|floatformat:"-4" }}</td>
+                    <td class="text-end">{{ exchange.rate_dir_fee|floatformat:"-4" }}</td>
+                    <td>{{ exchange.currencies_dir }}</td>
+                    <td class="text-end">{{ exchange.rate_rev|floatformat:"-4" }}</td>
+                    <td class="text-end">{{ exchange.rate_rev_fee|floatformat:"-4" }}</td>
+                    <td>{{ exchange.currencies_rev }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

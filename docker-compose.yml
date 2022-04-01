@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - 'money_db:/var/lib/postgresql/data'
+    ports:
+      - '5432:5432'
+  admin:
+    build:
+      dockerfile: Dockerfile_site
+      context: .
+    command: ./manage.py runserver admin:8000
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - '8000:8000'
+  bot:
+    build:
+      dockerfile: Dockerfile_bot
+      context: .
+    command: python bot.py
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+volumes:
+  money_db:
+    external: true
