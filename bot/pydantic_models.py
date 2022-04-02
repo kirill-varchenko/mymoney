@@ -11,7 +11,6 @@ class ExpenseModel(BaseModel):
     from_account_id: int
     from_amount: Decimal
     from_currency_id: str
-    to_account_id: Optional[int] = None
     to_amount: Optional[Decimal] = None
     to_currency_id: Optional[str] = None
 
@@ -20,11 +19,11 @@ class ExpenseModel(BaseModel):
         values['from_currency_id'] = values['from_currency_id'].upper()
         if values.get('to_currency_id'):
             values['to_currency_id'] = values['to_currency_id'].upper()
+        else:
+            values['to_currency_id'] = values['from_currency_id']
 
-        for var in ['account_id', 'amount', 'currency_id']:
-            to_var = f"to_{var}"
-            from_var = f"from_{var}"
-            if values.get(to_var) is None:
-                values[to_var] = values[from_var]
+        if values.get('to_amount') is None:
+            values['to_amount'] = values['from_amount']
+
         return values
 

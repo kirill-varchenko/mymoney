@@ -44,12 +44,12 @@ def start(update: Update, context: CallbackContext):
 
 @check_user
 def expense(update: Update, context: CallbackContext):
-    fields = ['from_account_id', 'from_amount', 'from_currency_id', 'to_account_id', 'to_amount', 'to_currency_id']
+    fields = ['from_account_id', 'from_amount', 'from_currency_id', 'to_amount', 'to_currency_id']
     if not context.args:
         text = 'Формат:\n' + ' '.join(fields)
     else:
-        expense = ExpenseModel(**dict(zip(fields, context.args)))
         try:
+            expense = ExpenseModel(**dict(zip(fields, context.args)))
             with Session() as session:
                 transaction = Transaction(**expense.dict())
                 session.add(transaction)
