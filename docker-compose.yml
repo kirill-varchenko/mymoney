@@ -13,7 +13,7 @@ services:
     build:
       dockerfile: Dockerfile_site
       context: .
-    command: ./manage.py runserver admin:8000
+    command: ./manage.py runserver 0.0.0.0:8000
     environment:
       - DB_HOST=db
       - DB_NAME=${DB_NAME}

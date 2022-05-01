@@ -23,6 +23,9 @@ class TransactionAdmin(admin.ModelAdmin):
                     'to_account', 'to_amount', 'to_currency',
                     'fee_amount', 'fee_currency']
 
+    # фильтрация в списке
+    list_filter = ('type', 'from_account', 'to_account')
+
 # @admin.register(Expense)
 # class ExpenseAdmin(admin.ModelAdmin):
 #     list_display = ('id', 'date',
